@@ -53,11 +53,9 @@ public class TicTacToeMain {
             System.out.println("Enter the coordinates:");
             String coordinates = scanner.nextLine();
 
-            String result = isValidCoordinate(coordinates);
+            String result = isValidCoordinate(coordinates, input);
 
             if (result.equals("Valid")) {
-                // Coordinates are valid; proceed to process them
-                // TODO: Add code here to update the game state with the new move
                 break; // Exit the loop since we have valid coordinates
             } else if (result.equals("Invalid Length")) {
                 System.out.println("You should enter numbers!");
@@ -74,9 +72,9 @@ public class TicTacToeMain {
      * The input must contain exactly two integers between 1 and 3, separated by whitespace.
      *
      * @param coordinates The string input to validate.
-     * @return true if the input is valid coordinates; false otherwise.
+     * @return Valid if the input is valid coordinates; Invalid Coordinates or Not Numbers otherwise.
      */
-    private static String isValidCoordinate(String coordinates) {
+    private static String isValidCoordinate(String coordinates, String input) {
         // Trim leading and trailing whitespace and split the input by spaces
         String[] tokens = coordinates.trim().split("\\s+");
         // Check if there are exactly two tokens
@@ -90,6 +88,7 @@ public class TicTacToeMain {
 
             // Check if both integers are between 1 and 3 (inclusive)
             if (x >= 1 && x <= 3 && y >= 1 && y <= 3) {
+                updateGameState(x, y, input);
                 return "Valid";
             } else {
                 return "Invalid Coordinates";
@@ -98,5 +97,33 @@ public class TicTacToeMain {
             // If parsing fails, the input is not numbers
             return "Not Numbers";
         }
+    }
+    private static void updateGameState(int x, int y, String input) {
+        char[][] arr = new char[3][3];
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                arr[i][j] = input.charAt(i * 3 + j);
+            }
+        }
+        if (arr[x - 1][y - 1] == 'X' || arr[x - 1][y - 1] == 'O') {
+            System.out.println("This cell is occupied! Choose another one!");
+        } else {
+            arr[x - 1][y - 1] = 'X';
+        }
+        printUpdatedTable(arr);
+    }
+    private static void printUpdatedTable(char[][] arr) {
+        System.out.println("---------");
+        for (int i = 0; i < 3; i++) {
+            System.out.print("| ");
+            for (int j = 0; j < 3; j++) {
+                char c = arr[i][j];
+                // Replace '_' with ' ' for better display
+                if (c == '_') c = ' ';
+                System.out.print(c + " ");
+            }
+            System.out.println("|");
+        }
+        System.out.println("---------");
     }
 }
