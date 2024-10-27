@@ -29,6 +29,8 @@ public class TicTacToeMain {
         }
         // Display the initial table.
         printTable(input);
+
+        cellCoordinates(scanner, input);
     }
     // Method to print the 3x3 table.
     private static void printTable(String input) {
@@ -50,16 +52,23 @@ public class TicTacToeMain {
         while (true) {
             System.out.println("Enter the coordinates:");
             String coordinates = scanner.nextLine();
-            // Trim leading and trailing whitespace and split the input by spaces
-            String[] tokens = coordinates.trim().split("\\s+");
 
-            if (isValidCoordinate(coordinates)) {
-                continue;
-            } else {
+            String result = isValidCoordinate(coordinates);
+
+            if (result.equals("Valid")) {
+                // Coordinates are valid; proceed to process them
+                // TODO: Add code here to update the game state with the new move
+                break; // Exit the loop since we have valid coordinates
+            } else if (result.equals("Invalid Length")) {
+                System.out.println("You should enter numbers!");
+            } else if (result.equals("Invalid Coordinates")) {
                 System.out.println("Coordinates should be from 1 to 3!");
+            } else if (result.equals("Not Numbers")) {
+                System.out.println("You should enter numbers!");
             }
         }
     }
+
     /**
      * Checks if the given input string represents valid coordinates within a 3x3 grid.
      * The input must contain exactly two integers between 1 and 3, separated by whitespace.
@@ -67,12 +76,12 @@ public class TicTacToeMain {
      * @param coordinates The string input to validate.
      * @return true if the input is valid coordinates; false otherwise.
      */
-    private static boolean isValidCoordinate(String coordinates) {
+    private static String isValidCoordinate(String coordinates) {
         // Trim leading and trailing whitespace and split the input by spaces
         String[] tokens = coordinates.trim().split("\\s+");
         // Check if there are exactly two tokens
         if (tokens.length != 2) {
-            return false;
+            return "Invalid Length";
         }
         try {
             // Parse the tokens to integers
@@ -80,11 +89,14 @@ public class TicTacToeMain {
             int y = Integer.parseInt(tokens[1]);
 
             // Check if both integers are between 1 and 3 (inclusive)
-            return x >= 1 && x <= 3 && y >= 1 && y <= 3;
+            if (x >= 1 && x <= 3 && y >= 1 && y <= 3) {
+                return "Valid";
+            } else {
+                return "Invalid Coordinates";
+            }
         } catch (NumberFormatException e) {
-            // If parsing fails, the input is invalid
-            return false;
+            // If parsing fails, the input is not numbers
+            return "Not Numbers";
         }
     }
-
 }
