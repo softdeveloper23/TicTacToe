@@ -19,7 +19,7 @@ public class TicTacToeMain {
                 System.out.println("Invalid input. Please enter exactly 9 characters.");
                 continue;
             }
-            // Check if all characters are 'X', 'O', or '_'.
+            // Check if all characters are 'X', 'O', or '_' using regex.
             if (!input.matches("[XO_]+")) {
                 System.out.println("Invalid input. Only X, O, or _ are allowed.");
                 continue;
@@ -45,4 +45,46 @@ public class TicTacToeMain {
         }
         System.out.println("---------");
     }
+
+    private static void cellCoordinates(Scanner scanner, String input) {
+        while (true) {
+            System.out.println("Enter the coordinates:");
+            String coordinates = scanner.nextLine();
+            // Trim leading and trailing whitespace and split the input by spaces
+            String[] tokens = coordinates.trim().split("\\s+");
+
+            if (isValidCoordinate(coordinates)) {
+                continue;
+            } else {
+                System.out.println("Coordinates should be from 1 to 3!");
+            }
+        }
+    }
+    /**
+     * Checks if the given input string represents valid coordinates within a 3x3 grid.
+     * The input must contain exactly two integers between 1 and 3, separated by whitespace.
+     *
+     * @param coordinates The string input to validate.
+     * @return true if the input is valid coordinates; false otherwise.
+     */
+    private static boolean isValidCoordinate(String coordinates) {
+        // Trim leading and trailing whitespace and split the input by spaces
+        String[] tokens = coordinates.trim().split("\\s+");
+        // Check if there are exactly two tokens
+        if (tokens.length != 2) {
+            return false;
+        }
+        try {
+            // Parse the tokens to integers
+            int x = Integer.parseInt(tokens[0]);
+            int y = Integer.parseInt(tokens[1]);
+
+            // Check if both integers are between 1 and 3 (inclusive)
+            return x >= 1 && x <= 3 && y >= 1 && y <= 3;
+        } catch (NumberFormatException e) {
+            // If parsing fails, the input is invalid
+            return false;
+        }
+    }
+
 }
